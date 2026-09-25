@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "../../styles/BookingCTA.module.css";
-import { useNavigate } from "react-router-dom";
+
 interface BookingCTAProps {
   onBookClick?: () => void;
 }
@@ -8,7 +8,7 @@ interface BookingCTAProps {
 export default function BookingCTA({ onBookClick }: BookingCTAProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  const navigate = useNavigate();
+
   useEffect(() => {
     const node = sectionRef.current;
     if (!node) return;
@@ -19,15 +19,12 @@ export default function BookingCTA({ onBookClick }: BookingCTAProps) {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 },
+      { threshold: 0.3 }
     );
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
 
-  const handleBook = () => {
-    navigate("/appointment-booking");
-  };
   return (
     <section
       ref={sectionRef}
@@ -41,12 +38,12 @@ export default function BookingCTA({ onBookClick }: BookingCTAProps) {
             Your next great look starts with one appointment.
           </h2>
           <p className={styles.subtext}>
-            Walk out sharper, sit back with confidence, and let the craft speak
-            for itself.
+            Walk out sharper, sit back with confidence, and let the craft
+            speak for itself.
           </p>
         </div>
 
-        <button type="button" className={styles.cta} onClick={handleBook}>
+        <button type="button" className={styles.cta} onClick={onBookClick}>
           Book Appointment
         </button>
       </div>

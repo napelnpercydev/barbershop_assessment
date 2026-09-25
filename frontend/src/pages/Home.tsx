@@ -1,5 +1,4 @@
 import Hero from "../components/Hero";
-import ImageCards from "../components/ui/ImageCards";
 import CraftServices from "../components/CraftServices";
 
 import FAQ from "../components/ui/Faq";

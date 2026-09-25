@@ -8,18 +8,12 @@ interface AboutPageProps {
   storyImageSrc?: string;
   storyImageAlt?: string;
   barbers?: Barber[];
-  ctaImageSrc?: string;
-  ctaImageAlt?: string;
-  onBookClick?: () => void;
 }
 
 export default function About({
   storyImageSrc,
   storyImageAlt,
   barbers,
-  ctaImageSrc,
-  ctaImageAlt,
-  onBookClick,
 }: AboutPageProps) {
   return (
     <>

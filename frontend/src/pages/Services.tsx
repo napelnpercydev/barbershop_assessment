@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState} from "react";
 import styles from "../styles/Services.module.css";
 import BookingCTA from "../components/ui/BookingCta";
 interface Service {

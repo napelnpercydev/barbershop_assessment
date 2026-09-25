@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import InstagramIcon from "../ui/InstagramIcon";
 import FacebookIcon from "../ui/FacebookIcon";
 import XIcon from "../ui/xIcon";
-import styles from "../../styles/Footer.module.css";
+import styles from "./Footer.module.css";
 
 interface FooterNavLink {
   label: string;
@@ -29,8 +29,9 @@ interface FooterProps {
 const DEFAULT_NAV_LINKS: FooterNavLink[] = [
   { label: "Home", to: "/" },
   { label: "Services", to: "/services" },
-  { label: "About", to: "/about-us" },
-  { label: "Contact", to: "/contact-us" },
+  { label: "Barbers", to: "/barbers" },
+  { label: "About", to: "/about" },
+  { label: "Contact", to: "/contact" },
 ];
 
 const DEFAULT_SOCIAL_LINKS: FooterSocialLink[] = [
@@ -48,7 +49,7 @@ export default function Footer({
   tagline = "Modern grooming, timeless craft.",
   navLinks = DEFAULT_NAV_LINKS,
   socialLinks = DEFAULT_SOCIAL_LINKS,
-  termsHref = "/terms-and-conditions",
+  termsHref = "/terms",
   privacyHref = "/privacy",
   onSubscribe,
 }: FooterProps) {
@@ -191,11 +192,11 @@ export default function Footer({
                 Terms &amp; Conditions
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link to={privacyHref} className={styles.legalLink}>
                 Privacy Policy
               </Link>
-            </li> */}
+            </li>
           </ul>
 
           <p className={styles.copyright}>
