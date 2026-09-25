@@ -9,7 +9,7 @@ const EMAILJS_CONTACT_US_TEMPLATE_ID = import.meta.env
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY;
 
 //send confrimation
-export const sendAppointmentConfirmation = async (appointment) => {
+export const sendAppointmentConfirmation = async (appointment: any) => {
   const {
     appointmentId,
     customer,
@@ -46,7 +46,7 @@ export const sendAppointmentConfirmation = async (appointment) => {
 };
 
 //CONTACT US
-export const sendContactMessage = async (data) => {
+export const sendContactMessage = async (data: any) => {
   const { name, email, subject, message } = data;
 
   const templateParams = {

@@ -2,12 +2,6 @@ import { useState, type FormEvent } from "react";
 import styles from "../styles/ContactForm.module.css";
 import { sendContactMessage } from "../services/emailService";
 
-interface ContactFormValues {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}
 
 interface HourRow {
   day: string;
