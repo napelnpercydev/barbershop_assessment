@@ -11,6 +11,7 @@ import InfoModal from "./components/Modal";
 import { Clock3 } from "lucide-react";
 import TermsAndConditions from "./pages/Terms";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/ui/ScrollToTop";
 function Layout() {
   return (
     <>
@@ -36,6 +37,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
