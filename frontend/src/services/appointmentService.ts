@@ -46,7 +46,5 @@ export const checkAvailability = async (
   params: AvailabilityParams,
 ): Promise<AvailabilityResponse> => {
   const response = await api.get("/appointments/availability", { params });
-
-  console.log("here bro damn", response.data);
   return response.data;
 };

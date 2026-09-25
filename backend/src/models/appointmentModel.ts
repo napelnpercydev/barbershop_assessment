@@ -6,7 +6,7 @@ export const findServiceById = (
   callback: (err: any, result?: any) => void,
 ) => {
   const sql = `
-    SELECT id, duration_minutes
+    SELECT id, duration_minutes, price, name
     FROM service
     WHERE id = ? AND is_active = TRUE
   `;

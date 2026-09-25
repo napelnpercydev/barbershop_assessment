@@ -5,6 +5,7 @@ import {
   createAppointment,
 } from "../models/appointmentModel";
 
+import { findBarberById } from "../models/barberModel";
 interface CreateAppointmentData {
   serviceId: number;
   barberId: number;
@@ -31,11 +32,9 @@ export const bookAppointment = (
     notes,
   } = data;
 
-  // 1. Get service duration
+  // 1. Get service details
   findServiceById(serviceId, (err, serviceResults) => {
-    if (err) {
-      return callback(err);
-    }
+    if (err) return callback(err);
 
     if (!serviceResults || serviceResults.length === 0) {
       return callback({
@@ -44,25 +43,23 @@ export const bookAppointment = (
       });
     }
 
-    const duration = serviceResults[0].duration_minutes;
+    const service = serviceResults[0];
+    const duration = service.duration_minutes;
 
     // 2. Calculate end time
     const start = new Date(`1970-01-01T${startTime}`);
-
     start.setMinutes(start.getMinutes() + duration);
 
     const endTime = start.toTimeString().slice(0, 8);
 
-    // 3. Check for conflicting appointment
+    // 3. Check for conflicting appointments
     findAppointmentConflict(
       barberId,
       appointmentDate,
       startTime,
       endTime,
       (err, conflicts) => {
-        if (err) {
-          return callback(err);
-        }
+        if (err) return callback(err);
 
         if (conflicts && conflicts.length > 0) {
           return callback({
@@ -73,9 +70,7 @@ export const bookAppointment = (
 
         // 4. Create customer
         createCustomer(name, email, phone, (err, customerResult) => {
-          if (err) {
-            return callback(err);
-          }
+          if (err) return callback(err);
 
           const customerId = customerResult.insertId;
 
@@ -89,18 +84,47 @@ export const bookAppointment = (
             endTime,
             notes || null,
             (err, appointmentResult) => {
-              if (err) {
-                return callback(err);
-              }
+              if (err) return callback(err);
 
-              callback(null, {
-                appointmentId: appointmentResult.insertId,
-                customerId,
-                serviceId,
-                barberId,
-                appointmentDate,
-                startTime,
-                endTime,
+              // Booking has been saved successfully
+              const appointmentId = appointmentResult.insertId;
+
+              // 6. Fetch barber details
+              findBarberById(barberId, (err, barberResults) => {
+                if (err) {
+                  console.error("Failed to fetch barber:", err);
+                }
+
+                const barber = barberResults?.[0];
+
+                // 7. Return confirmation details
+                return callback(null, {
+                  appointmentId,
+
+                  customer: {
+                    name,
+                    email,
+                    phone,
+                  },
+
+                  service: {
+                    id: serviceId,
+                    name: service.name,
+                    price: Number(service.price),
+                    durationMinutes: duration,
+                  },
+
+                  barber: {
+                    id: barberId,
+                    name: barber?.name ?? "Selected barber",
+                  },
+
+                  appointmentDate,
+                  startTime,
+                  endTime,
+                  notes: notes || null,
+                  status: "CONFIRMED",
+                });
               });
             },
           );
@@ -144,10 +168,7 @@ interface AvailabilityError extends Error {
 const SLOT_INTERVAL = 30;
 const TIMEZONE = "Africa/Johannesburg";
 
-const makeError = (
-  status: number,
-  message: string
-): AvailabilityError => {
+const makeError = (status: number, message: string): AvailabilityError => {
   const error: AvailabilityError = new Error(message);
   error.status = status;
   return error;
@@ -192,8 +213,8 @@ export const getAvailableSlots = (
   params: AvailabilityParams,
   callback: (
     err: AvailabilityError | null,
-    result?: AvailabilityResult
-  ) => void
+    result?: AvailabilityResult,
+  ) => void,
 ) => {
   const { barberId, serviceId, date } = params;
 
@@ -211,9 +232,7 @@ export const getAvailableSlots = (
   const now = getShopNow();
 
   if (date < now.date) {
-    return callback(
-      makeError(400, "Cannot book an appointment in the past")
-    );
+    return callback(makeError(400, "Cannot book an appointment in the past"));
   }
 
   const dayOfWeek = parsedDate.getUTCDay();
@@ -237,9 +256,7 @@ export const getAvailableSlots = (
       const duration = services[0].duration_minutes;
 
       if (!Number.isInteger(duration) || duration <= 0) {
-        return callback(
-          makeError(500, "Invalid service duration")
-        );
+        return callback(makeError(500, "Invalid service duration"));
       }
 
       // 3. Get the shop's operating hours.
@@ -267,63 +284,53 @@ export const getAvailableSlots = (
         const closing = toMinutes(businessHours.close_time);
 
         if (closing <= opening) {
-          return callback(
-            makeError(500, "Invalid business hours")
-          );
+          return callback(makeError(500, "Invalid business hours"));
         }
 
         // 4. Fetch the barber's existing appointments.
-        findBookedAppointments(
-          barberId,
-          date,
-          (err, appointments) => {
-            if (err) return callback(err);
+        findBookedAppointments(barberId, date, (err, appointments) => {
+          if (err) return callback(err);
 
-            const bookings = (appointments ?? []).map(
-              (appointment) => ({
-                start: toMinutes(appointment.start_time),
-                end: toMinutes(appointment.end_time),
-              })
-            );
+          const bookings = (appointments ?? []).map((appointment) => ({
+            start: toMinutes(appointment.start_time),
+            end: toMinutes(appointment.end_time),
+          }));
 
-            const slots: TimeSlot[] = [];
+          const slots: TimeSlot[] = [];
 
-            // 5. Generate slots at 30-minute intervals.
-            for (
-              let start = opening;
-              start + duration <= closing;
-              start += SLOT_INTERVAL
-            ) {
-              const end = start + duration;
+          // 5. Generate slots at 30-minute intervals.
+          for (
+            let start = opening;
+            start + duration <= closing;
+            start += SLOT_INTERVAL
+          ) {
+            const end = start + duration;
 
-              // Do not return times that have already passed.
-              if (date === now.date && start <= now.minutes) {
-                continue;
-              }
-
-              // Check for any overlap with existing appointments.
-              const hasConflict = bookings.some(
-                (booking) =>
-                  start < booking.end &&
-                  end > booking.start
-              );
-
-              if (!hasConflict) {
-                slots.push({
-                  startTime: toTime(start),
-                  endTime: toTime(end),
-                });
-              }
+            // Do not return times that have already passed.
+            if (date === now.date && start <= now.minutes) {
+              continue;
             }
 
-            return callback(null, {
-              date,
-              barberId,
-              serviceId,
-              slots,
-            });
+            // Check for any overlap with existing appointments.
+            const hasConflict = bookings.some(
+              (booking) => start < booking.end && end > booking.start,
+            );
+
+            if (!hasConflict) {
+              slots.push({
+                startTime: toTime(start),
+                endTime: toTime(end),
+              });
+            }
           }
-        );
+
+          return callback(null, {
+            date,
+            barberId,
+            serviceId,
+            slots,
+          });
+        });
       });
     });
   });

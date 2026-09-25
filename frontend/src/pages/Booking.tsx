@@ -4,14 +4,11 @@ import {
   useCreateAppointment,
   useCheckAvailability,
 } from "../hooks/useAppointment";
-// NOTE: adjust this import path and the two function names below to match
-// your actual calendar.ts exports.
 import {
   addAppointmentToGoogleCalendar,
   downloadAppointmentICS,
 } from "../utils/calendar";
 import styles from "../styles/Booking.module.css";
-
 /* ------------------------------------------------------------------ */
 /* Assumed shapes — adjust these to match your real API / hook types. */
 /* ------------------------------------------------------------------ */
@@ -359,7 +356,8 @@ export default function BookingForm() {
           </div>
           <h1 className={styles.confirmationHeading}>Appointment Confirmed</h1>
           <p className={styles.confirmationText}>
-            Your appointment has been successfully booked.
+            Your appointment has been successfully booked. check your email for
+            confirmation.
           </p>
 
           <div className={styles.confirmationDetails}>
@@ -570,7 +568,7 @@ export default function BookingForm() {
           {canCheckAvailability &&
             !isCheckingAvailability &&
             !isAvailabilityError &&
-        availability.length === 0 && (
+            availability.length === 0 && (
               <p className={styles.helperText}>
                 No appointments are available for this barber on this date.
                 Please choose another date or barber.

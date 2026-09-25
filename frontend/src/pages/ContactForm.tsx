@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import styles from "../styles/ContactForm.module.css";
+import { sendContactMessage } from "../services/emailService";
 
 interface ContactFormValues {
   name: string;
@@ -14,7 +15,6 @@ interface HourRow {
 }
 
 interface ContactFormProps {
-  onSubmit?: (values: ContactFormValues) => Promise<void> | void;
   address?: string;
   hours?: HourRow[];
   phone?: string;
@@ -41,7 +41,6 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 type Status = "idle" | "loading" | "success" | "error";
 
 export default function ContactForm({
-  onSubmit,
   address = "142 Fenwick Street, Johannesburg",
   hours = DEFAULT_HOURS,
   phone = "+27 11 555 0182",
@@ -83,21 +82,13 @@ export default function ContactForm({
     setStatus("loading");
 
     try {
-      if (onSubmit) {
-        await onSubmit({
-          name: name.trim(),
-          email: email.trim(),
-          subject,
-          message: message.trim(),
-        });
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, 900));
-      }
+      const payload = { name, email, subject, message };
+      await sendContactMessage(payload);
       setStatus("success");
     } catch {
       setStatus("error");
       setSubmitError(
-        "Something went wrong while sending your message. Please try again."
+        "Something went wrong while sending your message. Please try again.",
       );
     }
   };
@@ -124,8 +115,8 @@ export default function ContactForm({
               </div>
               <h2 className={styles.successHeading}>Message Sent</h2>
               <p className={styles.successText}>
-                Thanks for reaching out — we'll get back to you as soon as
-                we can.
+                Thanks for reaching out — we'll get back to you as soon as we
+                can.
               </p>
               <button
                 type="button"
@@ -161,7 +152,9 @@ export default function ContactForm({
                   value={name}
                   onChange={(event) => setName(event.target.value)}
                   aria-invalid={Boolean(errors.name)}
-                  aria-describedby={errors.name ? "contact-name-error" : undefined}
+                  aria-describedby={
+                    errors.name ? "contact-name-error" : undefined
+                  }
                   disabled={status === "loading"}
                 />
                 {errors.name && (
@@ -182,7 +175,9 @@ export default function ContactForm({
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   aria-invalid={Boolean(errors.email)}
-                  aria-describedby={errors.email ? "contact-email-error" : undefined}
+                  aria-describedby={
+                    errors.email ? "contact-email-error" : undefined
+                  }
                   disabled={status === "loading"}
                 />
                 {errors.email && (
@@ -272,7 +267,10 @@ export default function ContactForm({
             </li>
             <li className={styles.infoRow}>
               <span className={styles.infoLabel}>Phone</span>
-              <a href={`tel:${phone.replace(/\s+/g, "")}`} className={styles.infoLink}>
+              <a
+                href={`tel:${phone.replace(/\s+/g, "")}`}
+                className={styles.infoLink}
+              >
                 {phone}
               </a>
             </li>

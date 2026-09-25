@@ -4,10 +4,14 @@ import {
   checkAvailability,
   type AvailabilityParams,
 } from "../services/appointmentService";
+import { sendAppointmentConfirmation } from "../services/emailService";
 
 export const useCreateAppointment = () => {
   return useMutation({
     mutationFn: createAppointment,
+    onSuccess: (data) => {
+      sendAppointmentConfirmation(data.appointment);
+    },
   });
 };
 
