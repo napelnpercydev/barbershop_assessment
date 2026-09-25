@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import "../styles/Modal.css";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import styles from "../styles/Modal.module.css";
 
 interface InfoModalProps {
   isOpen: boolean;
@@ -10,45 +10,108 @@ interface InfoModalProps {
   onClose: () => void;
 }
 
-const InfoModal = ({
+export default function InfoModal({
   isOpen,
   title,
   message,
   icon,
   buttonText = "Got it",
   onClose,
-}: InfoModalProps) => {
-  if (!isOpen) return null;
+}: InfoModalProps) {
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [visible, setVisible] = useState(false);
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const previouslyFocused = useRef<HTMLElement | null>(null);
+
+  // Mount / unmount with a short exit transition instead of popping instantly.
+  useEffect(() => {
+    if (isOpen) {
+      previouslyFocused.current = document.activeElement as HTMLElement | null;
+      setShouldRender(true);
+      const frame = requestAnimationFrame(() => setVisible(true));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    setVisible(false);
+    const timeout = setTimeout(() => {
+      setShouldRender(false);
+      previouslyFocused.current?.focus?.();
+    }, 220);
+    return () => clearTimeout(timeout);
+  }, [isOpen]);
+
+  // Lock page scroll while the modal is up — pin body position rather than
+  // just hiding overflow, since overflow:hidden alone lets mobile browsers'
+  // address bar collapse/expand and briefly reveal the raw body background.
+  useEffect(() => {
+    if (!shouldRender) return;
+
+    const scrollY = window.scrollY;
+    const { style } = document.body;
+
+    style.position = "fixed";
+    style.top = `-${scrollY}px`;
+    style.left = "0";
+    style.right = "0";
+    style.overflow = "hidden";
+
+    return () => {
+      style.position = "";
+      style.top = "";
+      style.left = "";
+      style.right = "";
+      style.overflow = "";
+      window.scrollTo(0, scrollY);
+    };
+  }, [shouldRender]);
+
+  // Focus the action button on open, close on Escape.
+  useEffect(() => {
+    if (!isOpen) return;
+    buttonRef.current?.focus();
+
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [isOpen, onClose]);
+
+  if (!shouldRender) return null;
 
   return (
-    <div className="info-modal-overlay" onClick={onClose}>
+    <div
+      className={`${styles.overlay} ${visible ? styles.visible : ""}`}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
       <div
-        className="info-modal"
+        className={`${styles.dialog} ${visible ? styles.visible : ""}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="info-modal-title"
-        onClick={(event) => event.stopPropagation()}
+        aria-describedby="info-modal-message"
       >
-        <button
-          className="info-modal-close"
-          type="button"
-          aria-label="Close"
-          onClick={onClose}
-        >
-          ×
-        </button>
+        {icon && (
+          <div className={styles.iconBadge} aria-hidden="true">
+            {icon}
+          </div>
+        )}
 
-        {icon && <div className="info-modal-icon">{icon}</div>}
+        <h2 id="info-modal-title" className={styles.title}>
+          {title}
+        </h2>
 
-        <div className="info-modal-content">
-          <h2 id="info-modal-title">{title}</h2>
-
-          <p>{message}</p>
-        </div>
+        <p id="info-modal-message" className={styles.message}>
+          {message}
+        </p>
 
         <button
+          ref={buttonRef}
           type="button"
-          className="info-modal-button"
+          className={styles.button}
           onClick={onClose}
         >
           {buttonText}
@@ -56,6 +119,4 @@ const InfoModal = ({
       </div>
     </div>
   );
-};
-
-export default InfoModal;
+}

@@ -1,14 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "../../styles/BookingCta.module.css";
-
-interface BookingCTAProps {
-  onBookClick?: () => void;
-}
-
-export default function BookingCTA({ onBookClick }: BookingCTAProps) {
+import { useNavigate } from "react-router-dom";
+export default function BookingCTA() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const node = sectionRef.current;
     if (!node) return;
@@ -25,6 +21,9 @@ export default function BookingCTA({ onBookClick }: BookingCTAProps) {
     return () => observer.disconnect();
   }, []);
 
+  const handleBook = () => {
+    navigate("/appointment-booking");
+  };
   return (
     <section
       ref={sectionRef}
@@ -43,7 +42,7 @@ export default function BookingCTA({ onBookClick }: BookingCTAProps) {
           </p>
         </div>
 
-        <button type="button" className={styles.cta} onClick={onBookClick}>
+        <button type="button" className={styles.cta} onClick={handleBook}>
           Book Appointment
         </button>
       </div>
