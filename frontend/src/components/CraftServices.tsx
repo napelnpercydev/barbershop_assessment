@@ -2,22 +2,19 @@ import { Scissors, UserRound, Sparkles } from "lucide-react";
 import styles from "../styles/CraftServices.module.css";
 import { useNavigate } from "react-router-dom";
 
-interface CraftServicesProps {
-  onBookClick?: () => void;
-  onServicesClick?: () => void;
-}
-
 const SERVICES = [
   { name: "Haircut", Icon: Scissors },
   { name: "Haircut + Beard", Icon: UserRound },
   { name: "Beard Grooming", Icon: Sparkles },
 ] as const;
 
-export default function CraftServices({}: CraftServicesProps) {
+export default function CraftServices() {
   const navigate = useNavigate();
-  const handleLinkClick = (url) => {
+
+  const handleLinkClick = (url: string) => {
     navigate(url);
   };
+
   return (
     <section className={styles.section} aria-labelledby="craft-heading">
       <div className={styles.inner}>
@@ -48,6 +45,7 @@ export default function CraftServices({}: CraftServicesProps) {
                     aria-hidden="true"
                   />
                 </span>
+
                 <span className={styles.serviceName}>{name}</span>
               </li>
             ))}
@@ -57,18 +55,15 @@ export default function CraftServices({}: CraftServicesProps) {
             <button
               type="button"
               className={styles.primaryCta}
-              onClick={() => {
-                handleLinkClick("/appointment-booking");
-              }}
+              onClick={() => handleLinkClick("/appointment-booking")}
             >
               Book Now
             </button>
+
             <button
               type="button"
               className={styles.secondaryCta}
-              onClick={() => {
-                handleLinkClick("services");
-              }}
+              onClick={() => handleLinkClick("/services")}
             >
               View All Services
             </button>
