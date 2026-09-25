@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import InstagramIcon from "../ui/InstagramIcon";
 import FacebookIcon from "../ui/FacebookIcon";
 import XIcon from "../ui/xIcon";
-import styles from "./Footer.module.css";
+import styles from "../../styles/Footer.module.css";
 
 interface FooterNavLink {
   label: string;

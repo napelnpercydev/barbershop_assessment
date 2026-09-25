@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import styles from "../../styles/BookingCTA.module.css";
+import styles from "../../styles/BookingCta.module.css";
 
 interface BookingCTAProps {
   onBookClick?: () => void;
@@ -19,7 +19,7 @@ export default function BookingCTA({ onBookClick }: BookingCTAProps) {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
     observer.observe(node);
     return () => observer.disconnect();
@@ -38,8 +38,8 @@ export default function BookingCTA({ onBookClick }: BookingCTAProps) {
             Your next great look starts with one appointment.
           </h2>
           <p className={styles.subtext}>
-            Walk out sharper, sit back with confidence, and let the craft
-            speak for itself.
+            Walk out sharper, sit back with confidence, and let the craft speak
+            for itself.
           </p>
         </div>
 
