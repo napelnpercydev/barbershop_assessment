@@ -10,6 +10,7 @@ import ContactForm from "./pages/ContactForm";
 import InfoModal from "./components/Modal";
 import { Clock3 } from "lucide-react";
 import TermsAndConditions from "./pages/Terms";
+import NotFound from "./pages/NotFound";
 function Layout() {
   return (
     <>
@@ -42,7 +43,11 @@ export default function App() {
           <Route path="/about-us" element={<About />} />
           <Route path="/appointment-booking" element={<BookingForm />} />
           <Route path="/contact-us" element={<ContactForm />} />
-          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route
+            path="/terms-and-conditions"
+            element={<TermsAndConditions />}
+          />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
 
