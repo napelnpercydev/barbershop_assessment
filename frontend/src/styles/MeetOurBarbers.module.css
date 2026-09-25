@@ -1,0 +1,107 @@
+.section {
+  background: var(--cream, #f6f1e7);
+  padding: clamp(80px, 11vw, 140px) clamp(24px, 6vw, 96px);
+}
+
+.header {
+  max-width: 640px;
+  margin: 0 auto clamp(48px, 7vw, 80px);
+  text-align: center;
+}
+
+.heading {
+  margin: 0 0 18px;
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-weight: 460;
+  font-size: clamp(2rem, 3.4vw, 2.875rem);
+  line-height: 1.18;
+  color: var(--primary-dark, #0b211a);
+}
+
+.supporting {
+  margin: 0;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--ink-soft, #3f3a30);
+}
+
+.grid {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(40px, 5vw, 64px) clamp(24px, 3vw, 40px);
+}
+
+.profile {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.visible .profile {
+  opacity: 1;
+  transform: none;
+}
+
+.portraitWrap {
+  width: clamp(150px, 16vw, 200px);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .profile:hover .portrait {
+    transform: scale(1.08);
+  }
+}
+
+.name {
+  margin: 0 0 6px;
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-weight: 460;
+  font-size: 1.25rem;
+  color: var(--primary-dark, #0b211a);
+}
+
+.role {
+  margin: 0 0 14px;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--accent-hover, #b48d43);
+}
+
+.bio {
+  margin: 0 auto;
+  max-width: 30ch;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--ink-soft, #3f3a30);
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .profile,
+  .portrait {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

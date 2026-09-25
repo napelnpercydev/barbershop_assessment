@@ -1,0 +1,47 @@
+:root {
+  /* Primary - Forest Green */
+  --primary: #142d26;
+  --primary-light: #244638;
+  --primary-dark: #0b211a;
+
+  /* Accent - Champagne Gold */
+  --accent: #c9a45c;
+  --accent-hover: #b48d43;
+
+  /* Neutral */
+  --cream: #f6f1e7;
+  --white: #ffffff;
+  --muted: #d8c7af;
+}
+
+/* Add this to the very top of your global CSS file */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden; /* Prevents accidental horizontal scrolling */
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.main-container {
+  padding-top: 80px;
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    padding-top: 70px;
+  }
+}
+

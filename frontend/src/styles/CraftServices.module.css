@@ -1,0 +1,239 @@
+.section {
+  background: var(--cream, #f6f1e7);
+  padding: clamp(64px, 10vw, 128px) clamp(24px, 6vw, 96px);
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(300px, 440px) 1fr;
+  gap: clamp(48px, 7vw, 96px);
+  align-items: start;
+}
+
+/* ---------- Left: brand statement ---------- */
+
+.eyebrowRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.eyebrowRule {
+  width: 32px;
+  height: 1px;
+  background: var(--accent, #c9a45c);
+}
+
+.eyebrow {
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-hover, #b48d43);
+}
+
+.heading {
+  margin: 0 0 24px;
+  max-width: 18ch;
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-weight: 460;
+  font-size: clamp(2rem, 3.4vw, 3.125rem);
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  color: var(--primary-dark, #0b211a);
+}
+
+.supporting {
+  margin: 0;
+  max-width: 42ch;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--ink-soft, #3f3a30);
+}
+
+/* ---------- Right: services ---------- */
+
+.servicesCol {
+  padding-top: 6px;
+}
+
+.serviceList {
+  list-style: none;
+  margin: 0 0 44px;
+  padding: 0;
+  border-top: 1px solid var(--border, #e4d8c2);
+}
+
+.serviceItem {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 6px;
+  border-bottom: 1px solid var(--border, #e4d8c2);
+  transition: padding-left 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.4s ease;
+}
+
+.iconWrap {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--border, #e4d8c2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.4s ease;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  color: var(--primary-dark, #0b211a);
+  transition: color 0.4s ease;
+}
+
+.serviceName {
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--ink, #14140f);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .serviceItem:hover {
+    padding-left: 12px;
+    background: rgba(20, 45, 38, 0.035);
+  }
+
+  .serviceItem:hover .iconWrap {
+    border-color: var(--accent, #c9a45c);
+  }
+
+  .serviceItem:hover .icon {
+    color: var(--accent-hover, #b48d43);
+  }
+}
+
+/* ---------- CTAs ---------- */
+
+.ctaRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.primaryCta,
+.secondaryCta {
+  appearance: none;
+  cursor: pointer;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 16px 34px;
+  border-radius: 2px;
+  transition: background-color 0.35s ease, border-color 0.35s ease,
+    color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.primaryCta {
+  border: 1px solid var(--accent, #c9a45c);
+  background: var(--accent, #c9a45c);
+  color: var(--primary-dark, #0b211a);
+}
+
+.primaryCta:hover {
+  background: var(--accent-hover, #b48d43);
+  border-color: var(--accent-hover, #b48d43);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -14px rgba(11, 33, 26, 0.35);
+}
+
+.secondaryCta {
+  border: 1px solid var(--primary-dark, #0b211a);
+  background: transparent;
+  color: var(--primary-dark, #0b211a);
+}
+
+.secondaryCta:hover {
+  border-color: var(--accent, #c9a45c);
+  color: var(--accent-hover, #b48d43);
+}
+
+.primaryCta:active,
+.secondaryCta:active {
+  transform: translateY(0);
+}
+
+.primaryCta:focus-visible,
+.secondaryCta:focus-visible {
+  outline: 2px solid var(--primary-dark, #0b211a);
+  outline-offset: 3px;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 960px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .heading,
+  .supporting {
+    max-width: 60ch;
+  }
+
+  .servicesCol {
+    padding-top: 0;
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 480px) {
+  .serviceItem {
+    gap: 16px;
+    padding: 20px 4px;
+  }
+
+  .iconWrap {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ctaRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primaryCta,
+  .secondaryCta {
+    text-align: center;
+    width: 100%;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .serviceItem,
+  .iconWrap,
+  .icon,
+  .primaryCta,
+  .secondaryCta {
+    transition: none;
+  }
+
+  .primaryCta:hover,
+  .secondaryCta:hover {
+    transform: none;
+  }
+}

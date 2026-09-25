@@ -1,0 +1,166 @@
+.terms-page {
+  min-height: 100vh;
+  padding: 80px 20px 100px;
+  background: var(--cream);
+}
+
+.terms-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header */
+
+.terms-header {
+  margin-bottom: 55px;
+  text-align: center;
+}
+
+.terms-eyebrow {
+  display: inline-block;
+  margin-bottom: 14px;
+
+  color: var(--accent);
+
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.terms-header h1 {
+  margin: 0;
+
+  color: var(--primary-dark);
+
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.terms-intro {
+  max-width: 600px;
+  margin: 18px auto 25px;
+
+  color: #665f55;
+
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.terms-updated {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 9px 16px;
+
+  border: 1px solid rgba(201, 164, 92, 0.35);
+  border-radius: 999px;
+
+  background: rgba(201, 164, 92, 0.08);
+
+  color: var(--primary);
+  font-size: 0.82rem;
+}
+
+.terms-updated span {
+  color: #81776b;
+}
+
+.terms-updated strong {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Terms */
+
+.terms-list {
+  display: flex;
+  flex-direction: column;
+
+  border-top: 1px solid rgba(20, 45, 38, 0.12);
+}
+
+.terms-item {
+  padding: 30px 10px;
+
+  border-bottom: 1px solid rgba(20, 45, 38, 0.12);
+}
+
+.terms-item h2 {
+  margin: 0 0 12px;
+
+  color: var(--primary);
+
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.terms-item p {
+  max-width: 780px;
+  margin: 0;
+
+  color: #5e584f;
+
+  font-size: 0.94rem;
+  line-height: 1.8;
+}
+
+/* Hover */
+
+.terms-item {
+  transition: padding-left 0.2s ease;
+}
+
+.terms-item:hover {
+  padding-left: 18px;
+}
+
+.terms-item:hover h2 {
+  color: var(--accent-hover);
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .terms-page {
+    padding: 55px 18px 70px;
+  }
+
+  .terms-header {
+    margin-bottom: 40px;
+  }
+
+  .terms-header h1 {
+    font-size: 2.15rem;
+  }
+
+  .terms-intro {
+    font-size: 0.92rem;
+  }
+
+  .terms-updated {
+    flex-direction: column;
+    gap: 2px;
+
+    padding: 9px 18px;
+  }
+
+  .terms-item {
+    padding: 24px 2px;
+  }
+
+  .terms-item:hover {
+    padding-left: 2px;
+  }
+
+  .terms-item h2 {
+    font-size: 1rem;
+  }
+
+  .terms-item p {
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+}

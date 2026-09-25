@@ -1,0 +1,231 @@
+.page {
+  background: var(--cream, #f6f1e7);
+  color: var(--ink, #14140f);
+}
+
+/* ---------- Intro ---------- */
+
+.intro {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(64px, 10vw, 104px) clamp(24px, 6vw, 96px) clamp(32px, 5vw, 56px);
+  text-align: center;
+}
+
+.heading {
+  margin: 0 0 20px;
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-weight: 480;
+  font-size: clamp(2.25rem, 4.4vw, 3.25rem);
+  letter-spacing: -0.005em;
+  line-height: 1.1;
+  color: var(--primary-dark, #0b211a);
+  text-transform: uppercase;
+}
+
+.headingRule {
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--accent, #c9a45c);
+  margin: 0 auto 28px;
+}
+
+.introText {
+  margin: 0;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--ink-soft, #3f3a30);
+}
+
+/* ---------- Menu ---------- */
+
+.menu {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 6vw, 96px) clamp(88px, 12vw, 128px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(48px, 7vw, 72px);
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryHeader {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+
+.categoryTitle {
+  margin: 0;
+  flex: 0 0 auto;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-hover, #b48d43);
+}
+
+.categoryRule {
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--border, #e4d8c2);
+}
+
+.serviceList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.serviceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 26px 4px;
+  border-bottom: 1px solid var(--border, #e4d8c2);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    padding-left 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.4s ease;
+}
+
+.menu.visible .serviceRow {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.serviceInfo {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.serviceName {
+  margin: 0 0 6px;
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-weight: 460;
+  font-size: 1.25rem;
+  color: var(--primary-dark, #0b211a);
+}
+
+.serviceDescription {
+  margin: 0;
+  max-width: 46ch;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ink-soft, #3f3a30);
+}
+
+.serviceMeta {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.duration {
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.875rem;
+  color: var(--ink-soft, #3f3a30);
+  white-space: nowrap;
+}
+
+.price {
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--accent-hover, #b48d43);
+  white-space: nowrap;
+  min-width: 3.5ch;
+  text-align: right;
+}
+
+.bookButton {
+  flex: 0 0 auto;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  color: var(--primary-dark, #0b211a);
+  border: 1px solid var(--primary-dark, #0b211a);
+  border-radius: 2px;
+  padding: 10px 20px;
+  white-space: nowrap;
+  transition: background-color 0.35s ease, color 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.bookButton:hover {
+  background: var(--accent, #c9a45c);
+  border-color: var(--accent, #c9a45c);
+  color: var(--primary-dark, #0b211a);
+}
+
+.bookButton:focus-visible {
+  outline: 2px solid var(--primary-dark, #0b211a);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .serviceRow:hover {
+    padding-left: 12px;
+    background: rgba(20, 45, 38, 0.03);
+  }
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 720px) {
+  .serviceRow {
+    align-items: flex-start;
+  }
+
+  .serviceMeta {
+    gap: 14px;
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 560px) {
+  .serviceRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 22px 4px;
+  }
+
+  .serviceMeta {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .duration {
+    flex: 1 1 auto;
+  }
+
+  .price {
+    text-align: left;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .serviceRow {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
