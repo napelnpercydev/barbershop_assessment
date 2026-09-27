@@ -199,7 +199,7 @@ export default function BookingForm() {
 
   const availability = (data?.slots ?? []) as AvailabilitySlot[];
 
-  const { mutate: createAppointment, isPending: isCreatingAppointment } =
+  const { mutate: createAppointment, isPending: isCreatingAppointment, data:appointmentData } =
     useCreateAppointment();
 
   /* ---------------------------------------------------------------- */
@@ -390,7 +390,7 @@ export default function BookingForm() {
           </div>
 
           <p className={styles.confirmationReference}>
-            Booking reference: #{String(bookingResult.appointmentId)}
+            Booking reference: #{appointmentData.appointment.appointmentId}
           </p>
 
           <div className={styles.calendarActions}>

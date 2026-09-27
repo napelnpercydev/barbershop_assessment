@@ -6,11 +6,19 @@ import {
 } from "../services/appointmentService";
 import { sendAppointmentConfirmation } from "../services/emailService";
 
+
 export const useCreateAppointment = () => {
   return useMutation({
     mutationFn: createAppointment,
     onSuccess: (data) => {
+      // 1. Send the confirmation
       sendAppointmentConfirmation(data.appointment);
+
+      // 2. Scroll to the top of the page smoothly
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // Use 'auto' for an instant jump instead of an animation
+      });
     },
   });
 };
