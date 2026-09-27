@@ -9,6 +9,7 @@ import {
   downloadAppointmentICS,
 } from "../utils/calendar";
 import styles from "../styles/Booking.module.css";
+import Loader from "../components/ui/Loader";
 /* ------------------------------------------------------------------ */
 /* Assumed shapes — adjust these to match your real API / hook types. */
 /* ------------------------------------------------------------------ */
@@ -69,9 +70,21 @@ const BUSINESS_HOURS_DISPLAY = [
 ];
 
 const services: Service[] = [
-  { id: 1, name: "Haircut", price: 120, duration_minutes: 30 },
-  { id: 2, name: "Haircut + Beard", price: 180, duration_minutes: 45 },
-  { id: 3, name: "Full Grooming", price: 250, duration_minutes: 60 },
+  // Haircuts
+  { id: 1, name: "Classic Haircut", price: 120, duration_minutes: 30 },
+  { id: 2, name: "Skin Fade", price: 160, duration_minutes: 45 },
+  { id: 3, name: "Kids Haircut", price: 100, duration_minutes: 30 },
+  { id: 4, name: "Line-Up & Edge", price: 60, duration_minutes: 15 },
+
+  // Beard & Shave
+  { id: 5, name: "Beard Trim", price: 80, duration_minutes: 20 },
+  { id: 6, name: "Beard Sculpt & Design", price: 110, duration_minutes: 30 },
+  { id: 7, name: "Hot Towel Shave", price: 150, duration_minutes: 40 },
+
+  // Complete & Premium
+  { id: 8, name: "Haircut & Beard", price: 200, duration_minutes: 60 },
+  { id: 9, name: "Scalp & Hair Ritual", price: 190, duration_minutes: 50 },
+  { id: 10, name: "Premium Grooming", price: 280, duration_minutes: 75 },
 ];
 
 const DAY_KEYS = [
@@ -150,6 +163,7 @@ export default function BookingForm() {
     data: barbers = [],
     isLoading: isLoadingBarbers,
     isError: isBarberError,
+    refetch: refetchBarbers,
   } = useGetAllBarbers();
 
   const activeBarbers = (barbers as unknown as Barber[]).filter(
@@ -218,7 +232,12 @@ export default function BookingForm() {
       errors.email = "Enter a valid email address.";
     }
 
-    if (!phone.trim()) errors.phone = "Phone number is required.";
+    if (!phone.trim()) {
+      errors.phone = "Phone number is required.";
+    } else if (!/^0[0-9]{9}$/.test(phone.trim())) {
+      errors.phone = "Phone number must start with 0 and be 10 numbers";
+    }
+
     if (!serviceId) errors.service = "Please select a service.";
     if (!barberId) errors.barber = "Please select a barber.";
 
@@ -371,7 +390,7 @@ export default function BookingForm() {
           </div>
 
           <p className={styles.confirmationReference}>
-            Booking reference: #{String(bookingResult.id)}
+            Booking reference: #{String(bookingResult.appointmentId)}
           </p>
 
           <div className={styles.calendarActions}>
@@ -426,7 +445,7 @@ export default function BookingForm() {
 
         {/* Service */}
         <fieldset style={{ gridArea: "service" }} className={styles.panel}>
-          <legend className={styles.sectionHeading}>1. Select a Service</legend>
+          <h2 className={styles.sectionHeading}>1. Select a Service</h2>
           <div className={styles.serviceGrid}>
             {services.map((service) => {
               const isSelected = serviceId === service.id;
@@ -471,11 +490,24 @@ export default function BookingForm() {
           </label>
 
           {isLoadingBarbers ? (
-            <p className={styles.helperText}>Loading barbers...</p>
+            <>
+              {" "}
+              <p className={styles.helperText}>Loading barbers...</p>
+              <Loader size={15} />
+            </>
           ) : isBarberError ? (
-            <p className={styles.errorText} role="alert">
-              We couldn't load our barbers. Please refresh the page.
-            </p>
+            <div className={styles.errorBlock}>
+              <p className={styles.errorText} role="alert">
+                We couldn't load our barbers. Please refresh the page.
+              </p>
+              <button
+                type="button"
+                className={styles.secondaryButton}
+                onClick={() => refetchBarbers()}
+              >
+                Try Again
+              </button>
+            </div>
           ) : (
             <select
               id="barber-select"
@@ -537,9 +569,12 @@ export default function BookingForm() {
           )}
 
           {canCheckAvailability && isCheckingAvailability && (
-            <p className={styles.helperText} aria-live="polite">
-              Checking available times...
-            </p>
+            <>
+              <p className={styles.helperText} aria-live="polite">
+                Checking available times...
+              </p>
+              <Loader size={15} />
+            </>
           )}
 
           {canCheckAvailability &&
@@ -667,6 +702,8 @@ export default function BookingForm() {
                 <input
                   id="phone"
                   type="tel"
+                  minLength={10}
+                  maxLength={10}
                   className={styles.input}
                   value={phone}
                   onChange={(event) => setPhone(event.target.value)}

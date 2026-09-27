@@ -11,6 +11,5 @@ export interface Barber {
 
 export const getAllBarbers = async (): Promise<Barber[]> => {
   const response = await api.get("/barbers");
-  console.log(response.data,"lol bro");
   return response.data.barbers;
 };
