@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "../styles/Modal.module.css";
 
+
 interface InfoModalProps {
   isOpen: boolean;
   title: string;
@@ -10,7 +11,7 @@ interface InfoModalProps {
   onClose: () => void;
 }
 
-export default function InfoModal({
+export default function Modal({
   isOpen,
   title,
   message,
@@ -54,6 +55,7 @@ export default function InfoModal({
     style.top = `-${scrollY}px`;
     style.left = "0";
     style.right = "0";
+    style.width = "100%";
     style.overflow = "hidden";
 
     return () => {
@@ -61,8 +63,16 @@ export default function InfoModal({
       style.top = "";
       style.left = "";
       style.right = "";
+      style.width = "";
       style.overflow = "";
       window.scrollTo(0, scrollY);
+
+      // Some browsers (Opera among them) cache the page's scrollable height
+      // while body is position:fixed and don't recompute it immediately once
+      // that's removed, leaving stale blank space below the fold until a
+      // manual resize/scroll forces a repaint. Reading a layout property
+      // here forces that recalculation synchronously.
+      void document.body.offsetHeight;
     };
   }, [shouldRender]);
 
